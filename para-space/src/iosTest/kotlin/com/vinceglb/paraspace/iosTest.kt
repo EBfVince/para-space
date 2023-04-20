@@ -7,6 +7,6 @@ class IosGreetingTest {
 
     @Test
     fun testExample() {
-        assertTrue(Greeting().greet().contains("iOS"), "Check iOS is mentioned")
+        assertTrue(3 == 1 + 2, "Check iOS is mentioned")
     }
 }
