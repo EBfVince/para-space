@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -5,18 +7,30 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.vinceglb.paraspace"
+group = "com.vinceglb"
 version = "0.1.0"
 
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {
+    targetHierarchy.default()
 
-    android {
+    androidTarget {
         publishLibraryVariants("release", "debug")
     }
+    jvm("desktop")
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+        macosX64(),
+        macosArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -28,23 +42,11 @@ kotlin {
                 implementation(libs.atomicfu)
             }
         }
-        val androidMain by getting {
-            dependencies {}
-        }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
     }
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     namespace = "com.vinceglb.paraspace"
 
     defaultConfig {
