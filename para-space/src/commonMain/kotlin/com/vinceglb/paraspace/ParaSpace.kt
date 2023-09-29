@@ -40,7 +40,7 @@ class ParaSpace(private val paragraphSpacing: TextUnit) : VisualTransformation {
                 // If it's not the last paragraph
                 if (index != paragraphs.size - 1) {
                     builder.withStyle(style = SpanStyle(fontSize = paragraphSpacing)) {
-                        builder.append('\u0000')
+                        builder.append("\u200B")
                     }
                 }
             }
